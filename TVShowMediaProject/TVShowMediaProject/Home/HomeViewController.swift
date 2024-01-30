@@ -32,10 +32,6 @@ class HomeViewController: UIViewController {
             self.homeTableView.reloadData()
         }
         APIManager.shared.fetchPopularTVShow {
-            print("===================")
-            print($0.count)
-            print($0)
-            print("===================")
             self.popularTVShowList = $0
             self.homeTableView.reloadData()
         }
@@ -51,7 +47,7 @@ class HomeViewController: UIViewController {
     
     func configureLayout() {
         homeTableView.snp.makeConstraints { make in
-            make.size.equalToSuperview()
+            make.size.equalTo(view.safeAreaLayoutGuide)
         }
     }
     
@@ -142,7 +138,7 @@ extension HomeViewController:
             let currentItem = popularTVShowList[indexPath.item]
             let urlString = "\(APIUrl.tmdbImg)\(currentItem.poster ?? "")"
             let url = URL(string: urlString)
-            cell.posterImage.kf.setImage(with: url, placeholder: UIImage(systemName: "xmark"))
+            cell.posterImage.kf.setImage(with: url)
             cell.tvShowTitle.text = currentItem.name
             return cell
         }

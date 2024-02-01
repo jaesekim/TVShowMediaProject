@@ -69,4 +69,51 @@ class APIManager {
             }
         }
     }
+    
+    func fetchDetailTVShow(api: TMDBApi, completionHandler: @escaping (TVDetails) -> Void) {
+        
+        AF.request(
+            api.endPoint,
+            method: api.method,
+            headers: api.headers
+        ).responseDecodable(of: TVDetails.self) { response in
+            switch response.result {
+            case .success(let success):
+                completionHandler(success)
+            case .failure(let failure):
+                print(failure)
+            }
+        }
+    }
+    
+    func fetchCastsTVShow(api: TMDBApi, completionHandler: @escaping ([TVCastingsCasts]) -> Void) {
+        AF.request(
+            api.endPoint,
+            method: api.method,
+            headers: api.headers
+        ).responseDecodable(of: TVCastings.self) { response in
+            switch response.result {
+            case .success(let success):
+                completionHandler(success.cast)
+            case .failure(let failure):
+                print(failure)
+            }
+        }
+    }
+    
+    func fetchRecommendTVShow(api: TMDBApi, completionHandler: @escaping ([TVRecommendResults]) -> Void) {
+        
+        AF.request(
+            api.endPoint,
+            method: api.method,
+            headers: api.headers
+        ).responseDecodable(of: TVRecommend.self) { response in
+            switch response.result {
+            case .success(let success):
+                completionHandler(success.results)
+            case .failure(let failure):
+                print(failure)
+            }
+        }
+    }
 }

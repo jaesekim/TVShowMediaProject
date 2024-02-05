@@ -80,7 +80,8 @@ class DetailView: BaseView {
         }
         castCollectionView.snp.makeConstraints { make in
             make.top.equalTo(posterImage.snp.bottom).offset(8)
-            make.height.equalTo(UIScreen.main.bounds.width / 4)
+            make.width.equalTo(safeAreaLayoutGuide)
+            make.height.equalTo(UIScreen.main.bounds.width / 4 + 8)
             make.horizontalEdges.equalTo(safeAreaLayoutGuide)
         }
         recommendCollectionView.snp.makeConstraints { make in

@@ -23,9 +23,20 @@ class HomeViewController: UIViewController {
         super.viewDidLoad()
 
         // API Data Fetching
-        APIManager.shared.fetchWeekTrendTVShow {
-            self.trendTVShowList = $0
-            self.homeTableView.reloadData()
+//        APIManager.shared.fetchWeekTrendTVShow {
+//            self.trendTVShowList = $0
+//            self.homeTableView.reloadData()
+//        }
+        TMDBSessionManager.shared.fetchTVTrending { trend, error in
+            if error == nil {
+                guard let trend = trend else {
+                    return
+                }
+                self.trendTVShowList = trend.results
+                self.homeTableView.reloadData()
+            } else {
+                
+            }
         }
         APIManager.shared.fetchTopRatedTVShow {
             self.topRatedTVShowList = $0

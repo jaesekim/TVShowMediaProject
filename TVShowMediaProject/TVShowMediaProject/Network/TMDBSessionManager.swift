@@ -18,14 +18,15 @@ class TMDBSessionManager {
     
     static let shared = TMDBSessionManager()
     
-    func fetchTVTrending(
-        completionHandler: @escaping (TVTrending?, SesacError?) -> Void
+    func fetchTVForHome<T: Decodable>(
+        type: T.Type,
+        api: TMDBApi,
+        completionHandler: @escaping (T?, SesacError?) -> Void
     ) {
         
-        var url = URLRequest(url:TMDBApi.trend.endPoint)
+        var url = URLRequest(url: api.endPoint)
         url.httpMethod = "GET"
         url.addValue(APIKey.tmdbAPI, forHTTPHeaderField: "Authorization")
-        
         URLSession.shared.dataTask(with: url) { data, response, error in
             DispatchQueue.main.async {
                 guard error == nil else {
@@ -48,7 +49,7 @@ class TMDBSessionManager {
                 
                 do {
                     print("!@$!@$!@$")
-                    let result = try JSONDecoder().decode(TVTrending.self, from: data)
+                    let result = try JSONDecoder().decode(T.self, from: data)
                     print("성공")
                     completionHandler(result, nil)
                 } catch {

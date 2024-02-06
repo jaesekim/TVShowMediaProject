@@ -18,6 +18,8 @@ class HomeViewController: UIViewController {
     var trendTVShowList: [TVTrendingResults] = []
     var topRatedTVShowList: [TVTopRatedResults] = []
     var popularTVShowList: [TVPopularResults] = []
+    
+    let group = DispatchGroup()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,23 +29,80 @@ class HomeViewController: UIViewController {
 //            self.trendTVShowList = $0
 //            self.homeTableView.reloadData()
 //        }
-        TMDBSessionManager.shared.fetchTVTrending { trend, error in
+        
+        group.enter()
+        TMDBSessionManager.shared.fetchTVForHome(type: TVTrending.self, api: .trend) { trend, error in
             if error == nil {
                 guard let trend = trend else {
                     return
                 }
                 self.trendTVShowList = trend.results
-                self.homeTableView.reloadData()
             } else {
-                
+                switch error {
+                case .failedRequest:
+                    print("failedRequest")
+                case .noData:
+                    print("no data")
+                case .invalidResponse:
+                    print("invalid response")
+                case .invalidData:
+                    print("invalid data")
+                default:
+                    print("unrevealed error")
+                }
             }
+            self.group.leave()
         }
-        APIManager.shared.fetchTopRatedTVShow {
-            self.topRatedTVShowList = $0
-            self.homeTableView.reloadData()
+        // top rated
+        group.enter()
+        TMDBSessionManager.shared.fetchTVForHome(type: TVTopRated.self, api: .top) { top, error in
+            if error == nil {
+                guard let top = top else {
+                    return
+                }
+                self.topRatedTVShowList = top.results
+            } else {
+                switch error {
+                case .failedRequest:
+                    print("failedRequest")
+                case .noData:
+                    print("no data")
+                case .invalidResponse:
+                    print("invalid response")
+                case .invalidData:
+                    print("invalid data")
+                default:
+                    print("unrevealed error")
+                }
+            }
+            self.group.leave()
         }
-        APIManager.shared.fetchPopularTVShow {
-            self.popularTVShowList = $0
+        // popular
+        group.enter()
+        TMDBSessionManager.shared.fetchTVForHome(type: TVPopular.self, api: .popular) { popular, error in
+            if error == nil {
+                guard let popular = popular else {
+                    return
+                }
+                self.popularTVShowList = popular.results
+            } else {
+                switch error {
+                case .failedRequest:
+                    print("failedRequest")
+                case .noData:
+                    print("no data")
+                case .invalidResponse:
+                    print("invalid response")
+                case .invalidData:
+                    print("invalid data")
+                default:
+                    print("unrevealed error")
+                }
+            }
+            self.group.leave()
+        }
+        
+        group.notify(queue: .main) {
             self.homeTableView.reloadData()
         }
         

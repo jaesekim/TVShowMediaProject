@@ -10,6 +10,8 @@ import Alamofire
 
 enum TMDBApi {
     case trend
+    case top
+    case popular
     case detail(movieId: Int)
     case recommend(movieId: Int)
     case casts(movieId: Int)
@@ -18,6 +20,10 @@ enum TMDBApi {
         switch self {
         case .trend:
             return URL(string: "\(APIUrl.tmdb)/trending/tv/week?language=ko-KR")!
+        case .top:
+            return URL(string: "\(APIUrl.tmdb)/tv/top_rated?language=ko-KR")!
+        case .popular:
+            return URL(string: "\(APIUrl.tmdb)/tv/popular?language=ko-KR")!
         case .detail(let movieId):
             return URL(string: "\(APIUrl.tmdb)/tv/\(movieId)?language=ko-KR")!
         case .recommend(let movieId):

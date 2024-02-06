@@ -32,7 +32,7 @@ class DetailViewController: UIViewController {
         mainView.castCollectionView.dataSource = self
         
         mainView.recommendCollectionView.delegate = self
-        mainView.recommendCollectionView.delegate = self
+        mainView.recommendCollectionView.dataSource = self
         
         // Network 통신
         let group = DispatchGroup()
